@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="{{ asset('css/flaticon.css') }}">
     <link rel="stylesheet" href="{{ asset('css/icomoon.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    @stack('scripts')
   </head>
   <body>
       <nav class="navbar px-md-0 navbar-expand-lg navbar-dark ftco_navbar bg-dark {{!empty($banner) ? 'ftco-navbar-light' : ''}}" id="ftco-navbar">
@@ -87,11 +88,10 @@
               <div class="sidebar-box ftco-animate">
                 <div class="categories">
                   <h3>Categories</h3>
-                  <li><a href="#">Illustration <span class="ion-ios-arrow-forward"></span></a></li>
-                  <li><a href="#">Branding <span class="ion-ios-arrow-forward"></span></a></li>
-                  <li><a href="#">Application <span class="ion-ios-arrow-forward"></span></a></li>
-                  <li><a href="#">Design <span class="ion-ios-arrow-forward"></span></a></li>
-                  <li><a href="#">Marketing <span class="ion-ios-arrow-forward"></span></a></li>
+                  @php $categories = App\Category::all(); @endphp
+                  @foreach($categories as $category)
+                    <li><a href="#">{{$category->title}} <span class="ion-ios-arrow-forward"></span></a></li>
+                  @endforeach
                 </div>
               </div>
 
