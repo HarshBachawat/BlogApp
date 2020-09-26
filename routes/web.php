@@ -15,6 +15,8 @@ Route::get('/', function () {
     return view('welcome');
 })->name('/');
 
+Route::get('/single-blog', 'HomeController@singleBlog')->name('single-blog');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
