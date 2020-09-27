@@ -25,9 +25,35 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
 
-    public function welcome() {
-        $blogs = Blog::orderBy('created_at','DESC')->paginate(3);
-        return view('welcome',compact('blogs'));
+    public function welcome(Request $request) {
+        $banner = 1;
+        $blogs = Blog::select('blogs.*','categories.title as cat_title','users.name as username')
+                ->leftJoin('categories','blogs.category_id','=','categories.id')
+                ->leftJoin('users','blogs.user_id','=','users.id')
+                ->orderBy('created_at','DESC');
+
+        if (isset($request->search)) {
+            $banner = 0;
+            $search = strtolower($request->search);
+            $blogs = $blogs->where(function ($query) use ($search) {
+                $query->orWhere('blogs.title','like','%'.$search.'%')
+                ->orWhere('categories.title','like','%'.$search.'%')
+                ->orWhere('users.name','like','%'.$search.'%');
+            });
+        }
+        elseif (isset($request->category)) {
+            $banner = 0;
+            $category = $request->category;
+            $blogs = $blogs->where(function ($query) use ($category) {
+                $query->orWhere('blogs.category_id','=',$category);
+            });
+        }
+
+        if (isset($request->page) && $request->page>1) {
+            $banner = 0;
+        }
+        $blogs = $blogs->paginate('3');
+        return view('welcome',compact('blogs','banner'));
     }
 
     public function index() {

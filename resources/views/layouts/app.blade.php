@@ -47,10 +47,10 @@
               {{-- <li class="nav-item"><a href="{{ route('create-blog') }}" class="nav-link">New Blog</a></li> --}}
               {{-- <li class="nav-item"><a href="{{ route('home') }}" class="nav-link">My Blogs</a></li> --}}
               @else
-              <li class="nav-item"><a href="{{ route('register') }}" class="nav-link">Register</a></li>
-              <li class="nav-item"><a href="{{ route('login') }}" class="nav-link">Login</a></li>
+              <li class="nav-item {{ Request::is('register') ? 'active' : '' }}"><a href="{{ route('register') }}" class="nav-link">Register</a></li>
+              <li class="nav-item {{ Request::is('login') ? 'active' : '' }}"><a href="{{ route('login') }}" class="nav-link">Login</a></li>
               @endauth
-              <li class="nav-item"><a href="{{ route('about-us') }}" class="nav-link">About Us</a></li>
+              <li class="nav-item {{ Request::is('about-us') ? 'active' : '' }}"><a href="{{ route('about-us') }}" class="nav-link">About Us</a></li>
               @auth
               <li class="nav-item dropdown">
                 <a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Open Profile Menu" style="padding:0px;">
@@ -109,10 +109,10 @@
           @if(!empty($sidebar))
             <div class="col-md-3 sidebar pl-lg-5 ftco-animate">
               <div class="sidebar-box">
-                <form action="#" class="search-form">
+                <form action="{{ route('/') }}" method="get" id="blog-search" class="search-form">
                   <div class="form-group">
                     <span class="icon icon-search"></span>
-                    <input type="text" class="form-control" placeholder="Type a keyword and hit enter">
+                    <input type="search" class="form-control" id="search" name="search" value="{{ Request::get('search') }}" placeholder="Type a keyword and hit enter">
                   </div>
                 </form>
               </div>
@@ -121,7 +121,7 @@
                   <h3>Categories</h3>
                   @php $categories = App\Category::all(); @endphp
                   @foreach($categories as $category)
-                    <li><a href="#">{{$category->title}} <span class="ion-ios-arrow-forward"></span></a></li>
+                    <li class="{{ Request::get('category')==$category->id ? 'active' : '' }}"><a href="{{ route('/').'/?category='.$category->id }}">{{$category->title}} <span class="ion-ios-arrow-forward"></span></a></li>
                   @endforeach
                 </div>
               </div>
@@ -222,7 +222,7 @@
                 <li><a href="{{ route('register') }}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Register</a></li>
                 <li><a href="{{ route('login') }}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Login</a></li>
                 @endauth
-                <li><a href="{{ route('/') }}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Contact</a></li>
+                <li><a href="{{ route('about-us') }}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>About Us</a></li>
               </ul>
             </div>
           </div>

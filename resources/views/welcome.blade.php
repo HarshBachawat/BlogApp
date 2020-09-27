@@ -1,4 +1,4 @@
-@php $banner = 1; $sidebar = 1@endphp
+@php $sidebar = 1@endphp
 @extends('layouts.app')
 
 @section('content')
