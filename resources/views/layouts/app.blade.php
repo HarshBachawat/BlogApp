@@ -21,25 +21,56 @@
     <link rel="stylesheet" href="{{ asset('css/flaticon.css') }}">
     <link rel="stylesheet" href="{{ asset('css/icomoon.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.0/css/all.css">
+
+
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/jquery-migrate-3.0.1.min.js') }}"></script>
+    <script src="{{ asset('js/popper.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+
+
     @stack('scripts')
   </head>
   <body>
       <nav class="navbar px-md-0 navbar-expand-lg navbar-dark ftco_navbar bg-dark {{!empty($banner) ? 'ftco-navbar-light' : ''}}" id="ftco-navbar">
         <div class="container">
-          <a class="navbar-brand" href="index.html">Read<i>it</i>.</a>
+          <a class="navbar-brand" href="{{ route('/') }}">Read<i>it</i>.</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="oi oi-menu"></span> Menu
           </button>
 
           <div class="collapse navbar-collapse" id="ftco-nav">
             <ul class="navbar-nav ml-auto">
-              <li class="nav-item active"><a href="{{ route('/') }}" class="nav-link">Home</a></li>
+              <li class="nav-item {{ Request::is('/') ? 'active' : '' }}"><a href="{{ route('/') }}" class="nav-link">Home</a></li>
               @auth
+              {{-- <li class="nav-item"><a href="{{ route('create-blog') }}" class="nav-link">New Blog</a></li> --}}
+              {{-- <li class="nav-item"><a href="{{ route('home') }}" class="nav-link">My Blogs</a></li> --}}
               @else
               <li class="nav-item"><a href="{{ route('register') }}" class="nav-link">Register</a></li>
               <li class="nav-item"><a href="{{ route('login') }}" class="nav-link">Login</a></li>
               @endauth
-              <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+              <li class="nav-item"><a href="{{ route('about-us') }}" class="nav-link">About Us</a></li>
+              @auth
+              <li class="nav-item dropdown">
+                <a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Open Profile Menu" style="padding:0px;">
+                  @if(Auth::user()->profile_img)
+                  <img src="{{ Storage::url(Auth::user()->profile_img) }}" alt="pr_pic" class="img-circle img-responsive" style="height:50px">
+                  @else
+                  <img src="{{ asset('images/avatar-3.png') }}" alt="pr_pic" class="img-circle img-responsive" style="height:50px">
+                  @endif
+                </a>
+                <ul class="dropdown-menu settings-menu dropdown-menu-right">
+                  <li><a class="dropdown-item" href="{{ route('create-blog') }}"><i class="fas fa-plus-square fa-lg"></i> New Blog</a></li>
+                  <li><a class="dropdown-item" href="{{ route('home') }}"><i class="fas fa-blog"></i> My Blogs</a></li>
+                  {{-- <li><a class="dropdown-item" href="#"><i class="fa fa-user fa-lg"></i> Profile</a></li> --}}
+                  <li><a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    {{ csrf_field() }}
+                  </form>
+                </ul>
+              </li>
+              @endauth
             </ul>
           </div>
         </div>
@@ -76,7 +107,7 @@
             <div class="row">
                 @yield('content')
           @if(!empty($sidebar))
-            <div class="col-md-4 sidebar pl-lg-5 ftco-animate">
+            <div class="col-md-3 sidebar pl-lg-5 ftco-animate">
               <div class="sidebar-box">
                 <form action="#" class="search-form">
                   <div class="form-group">
@@ -95,10 +126,10 @@
                 </div>
               </div>
 
-              <div class="sidebar-box ftco-animate">
+              {{-- <div class="sidebar-box ftco-animate">
                 <h3>Recent Blog</h3>
                 <div class="block-21 mb-4 d-flex">
-                  <a class="blog-img mr-4" style="background-image: url(images/image_1.jpg);"></a>
+                  <a class="blog-img mr-4" style="background-image: url({{ url('images/image_1.jpg') }});"></a>
                   <div class="text">
                     <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about the blind texts</a></h3>
                     <div class="meta">
@@ -109,7 +140,7 @@
                   </div>
                 </div>
                 <div class="block-21 mb-4 d-flex">
-                  <a class="blog-img mr-4" style="background-image: url(images/image_2.jpg);"></a>
+                  <a class="blog-img mr-4" style="background-image: url({{ url('images/image_2.jpg') }});"></a>
                   <div class="text">
                     <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about the blind texts</a></h3>
                     <div class="meta">
@@ -120,7 +151,7 @@
                   </div>
                 </div>
                 <div class="block-21 mb-4 d-flex">
-                  <a class="blog-img mr-4" style="background-image: url(images/image_3.jpg);"></a>
+                  <a class="blog-img mr-4" style="background-image: url({{ url('images/image_3.jpg') }});"></a>
                   <div class="text">
                     <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about the blind texts</a></h3>
                     <div class="meta">
@@ -130,7 +161,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> --}}
             </div>
           @endif
         </div>
@@ -185,6 +216,8 @@
               <ul class="list-unstyled">
                 <li><a href="{{ route('/') }}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Home</a></li>
                 @auth
+                <li><a href="{{ route('create-blog') }}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>New Blog</a></li>
+                <li><a href="{{ route('home') }}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>My Blogs</a></li>
                 @else
                 <li><a href="{{ route('register') }}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Register</a></li>
                 <li><a href="{{ route('login') }}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Login</a></li>
@@ -223,10 +256,6 @@
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
 
 
-  <script src="{{ asset('js/jquery.min.js') }}"></script>
-  <script src="{{ asset('js/jquery-migrate-3.0.1.min.js') }}"></script>
-  <script src="{{ asset('js/popper.min.js') }}"></script>
-  <script src="{{ asset('js/bootstrap.min.js') }}"></script>
   <script src="{{ asset('js/jquery.easing.1.3.js') }}"></script>
   <script src="{{ asset('js/jquery.waypoints.min.js') }}"></script>
   <script src="{{ asset('js/jquery.stellar.min.js') }}"></script>
@@ -235,6 +264,7 @@
   <script src="{{ asset('js/aos.js') }}"></script>
   <script src="{{ asset('js/jquery.animateNumber.min.js') }}"></script>
   <script src="{{ asset('js/scrollax.min.js') }}"></script>
+  @stack('downscripts')
   <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="{{ asset('js/google-map.js') }}"></script> -->
   <script src="{{ asset('js/main.js') }}"></script>

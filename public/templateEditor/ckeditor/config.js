@@ -28,7 +28,8 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// Remove some buttons provided by the standard plugins, which are
 	// not needed in the Standard(s) toolbar.
-	config.extraPlugins ='mathjax';
+	config.extraPlugins ='mathjax,autogrow';
+	config.autoGrow_maxHeight = '850';
 	config.removeButtons = '';
 	config.mathJaxLib = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML';
 
