@@ -80,30 +80,6 @@
         }
     }
 
-    function submitForm() {
-      $.ajax({
-        type: 'post',
-        url: '{{ route('add-blog') }}',
-        data: {
-          _token: '{{csrf_token()}}',
-          title: $('#title').val(),
-          cover_img: $('#cover_img').prop('files')[0],
-          category: $('#category').val(),
-          content: CKEDITOR.instances['content'].getData()
-        },
-        success: function(data) {
-          console.log('Blog Added');
-          swal({
-            title: "Blog Added!",
-            icon: "success"
-          });
-          setTimeout(function(){
-            window.location.href = '{{  route('home') }}';
-          }, 1200);
-        }
-      });
-    }
-
     $('#edit_blog').submit(function() {
 
       $('#title_error').hide();

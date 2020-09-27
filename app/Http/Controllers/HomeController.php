@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Blog;
 use App\Category;
+use App\User;
 use Auth;
 use Storage;
+use Illuminate\Support\Facades\Hash;
 
 class HomeController extends Controller
 {
@@ -145,6 +147,59 @@ class HomeController extends Controller
                 return redirect()->route('single-blog',$blog->id);
             }
         }
+        return redirect()->back();
+    }
+
+    public function editProfile() {
+        return view('edit-profile');
+    }
+
+    public function updateProfile(Request $request) {
+        $filePath = Auth::user()->profile_img;
+        if($request->hasFile('profile_img'))
+        {
+          // Get filename with the extension
+          $filenameWithExt = $request->file('profile_img')->getClientOriginalName();
+          // Get just filename
+          $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+          // Get just ext
+          $extension = $request->file('profile_img')->getClientOriginalExtension();
+          // Filename to store
+          $fileNameToStore= $filename.'_'.time().'.'.$extension;
+          $filePath = 'profile_img/' . $fileNameToStore;
+          // Upload Image
+          $file = $request->file('profile_img');
+          Storage::disk('public')->put($filePath, file_get_contents($file));
+        }
+        $user = User::findOrFail(Auth::id());
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->profile_img = $filePath;
+        $user->description = $request->description;
+        $user->update();
+        return redirect()->route('home');
+    }
+
+    public function updatePassword(Request $request) {
+        $new_password = $request->newPassword;
+        $cnf_password = $request->confirmPassword;
+        if(Hash::check($request->currentPassword, Auth::user()->password)){
+            if($new_password == $cnf_password){
+                Auth::user()->password = Hash::make($request['current_password']);
+                Auth::user()->save();
+                return redirect('edit-profile');
+                // $data['msg_type'] = "Success";
+                // $data['msg'] = "Password Changed Successfully";
+            }
+            // else{
+                // $data['msg_type'] = "error";
+                // $data['msg'] = "Password and Confirm Password is not Same";
+            // }
+        }
+        // else{
+            // $data['msg_type'] = "error";
+            // $data['msg'] ="Current password is Incorrect";
+        // }
         return redirect()->back();
     }
 

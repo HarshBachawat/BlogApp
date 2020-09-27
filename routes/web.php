@@ -25,4 +25,8 @@ Route::get('/{blog_id}/delete-blog', 'HomeController@deleteBlog')->name('delete-
 Route::get('/{blog_id}/edit-blog', 'HomeController@editBlog')->name('edit-blog');
 Route::put('/update-blog', 'HomeController@updateBlog')->name('update-blog');
 
+Route::get('/edit-profile', 'HomeController@editProfile')->name('edit-profile');
+Route::put('/update-profile', 'HomeController@updateProfile')->name('update-profile');
+Route::post('/update-password', 'HomeController@updatePassword')->name('update-password');
+
 Route::get('/about-us', 'HomeController@aboutUs')->name('about-us');

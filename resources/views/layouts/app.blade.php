@@ -63,7 +63,7 @@
                 <ul class="dropdown-menu settings-menu dropdown-menu-right">
                   <li><a class="dropdown-item" href="{{ route('create-blog') }}"><i class="fas fa-plus-square fa-lg"></i> New Blog</a></li>
                   <li><a class="dropdown-item" href="{{ route('home') }}"><i class="fas fa-blog"></i> My Blogs</a></li>
-                  {{-- <li><a class="dropdown-item" href="#"><i class="fa fa-user fa-lg"></i> Profile</a></li> --}}
+                  <li><a class="dropdown-item" href="{{ route('edit-profile') }}"><i class="fa fa-user fa-lg"></i> Profile</a></li>
                   <li><a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                   <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                     {{ csrf_field() }}
@@ -218,6 +218,7 @@
                 @auth
                 <li><a href="{{ route('create-blog') }}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>New Blog</a></li>
                 <li><a href="{{ route('home') }}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>My Blogs</a></li>
+                <li><a href="{{ route('edit-profile') }}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Profile</a></li>
                 @else
                 <li><a href="{{ route('register') }}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Register</a></li>
                 <li><a href="{{ route('login') }}" class="py-1 d-block"><span class="ion-ios-arrow-forward mr-3"></span>Login</a></li>
