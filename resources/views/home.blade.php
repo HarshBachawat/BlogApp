@@ -4,7 +4,9 @@
 <div class="col-md-9">
     <h2 style="text-align: center;">My Blogs</h2>
     <br>
-    @foreach(Auth::user()->blogs as $blog)
+    @php $blogs = Auth::user()->blogs; @endphp
+    @if(count($blogs))
+    @foreach($blogs as $blog)
     <div class="case">
         <div class="row">
             <div class="col-md-6 col-lg-6 col-xl-8 d-flex">
@@ -31,5 +33,12 @@
         </div>
     </div>
     @endforeach
+    @else
+    <div class="text-center">
+        <h1>You have no Blogs right now!! Click Below to create one.</h1>
+        <a href="{{ route('create-blog') }} " class="btn btn-lg btn-primary">Create Blog</a>
+    </div>
+    
+    @endif
 </div>
 @endsection

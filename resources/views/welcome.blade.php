@@ -1,8 +1,9 @@
-@php $sidebar = 1@endphp
+@php $sidebar = 1; @endphp
 @extends('layouts.app')
 
 @section('content')
 <div class="col-md-9">
+    @if(count($blogs))
     @foreach($blogs as $blog)
     <div class="case">
         <div class="row">
@@ -26,11 +27,14 @@
         </div>
     </div>
     @endforeach
+    @else
+    <h1 style="text-align: center;">Sorry.. No Results Found!!</h1>
+    @endif
 
     <div class="row mt-5">
       <div class="col text-center">
         <div class="block-27">
-            {{ $blogs->links('partials.pagination') }}
+            {{ $blogs->appends(Request::except('page'))->links('partials.pagination') }}
           {{-- <ul>
             <li><a href="#">&lt;</a></li>
             <li class="active"><span>1</span></li>
